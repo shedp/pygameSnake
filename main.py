@@ -23,13 +23,61 @@ class SNAKE:
         self.body = [Vector2(5,10),Vector2(4,10),Vector2(3,10)]
         self.direction = Vector2(1,0)
         self.new_block = False
+        self.head = self.body[0]
+        self.tail = self.body[-1]
+
+        self.head_up = pygame.image.load('graphics/head_up.png').convert_alpha()
+        self.head_down = pygame.image.load('graphics/head_down.png').convert_alpha()
+        self.head_right = pygame.image.load('graphics/head_right.png').convert_alpha()
+        self.head_left = pygame.image.load('graphics/head_left.png').convert_alpha()
+        
+        self.tail_up = pygame.image.load('graphics/tail_up.png').convert_alpha()
+        self.tail_down = pygame.image.load('graphics/tail_down.png').convert_alpha()
+        self.tail_right = pygame.image.load('graphics/tail_right.png').convert_alpha()
+        self.tail_left = pygame.image.load('graphics/tail_left.png').convert_alpha()
+        
+        self.body_vertical = pygame.image.load('graphics/body_vertical.png').convert_alpha()
+        self.body_horizontal = pygame.image.load('graphics/body_horizontal.png').convert_alpha()
+        
+        self.body_tr = pygame.image.load('graphics/body_tr.png').convert_alpha()
+        self.body_tl = pygame.image.load('graphics/body_tl.png').convert_alpha()
+        self.body_br = pygame.image.load('graphics/body_br.png').convert_alpha()
+        self.body_bl = pygame.image.load('graphics/body_bl.png').convert_alpha()
     
     def draw_snake(self):
-        for block in self.body:
+        # for block in self.body:
+        #     snake_rect = pygame.Rect(block.x*cell_size,block.y*cell_size,cell_size,cell_size)
+        #     pygame.draw.rect(screen,(55, 140, 231),snake_rect)
+
+        self.update_head()
+        self.update_tail()
+        for index,block in enumerate(self.body):
             #create rect
-            #draw rect
-            snake_rect = pygame.Rect(block.x*cell_size,block.y*cell_size,cell_size,cell_size)
-            pygame.draw.rect(screen,(55, 140, 231),snake_rect)
+            x_pos = block.x*cell_size
+            y_pos = block.y*cell_size
+            block_rect = pygame.Rect(x_pos,y_pos,cell_size,cell_size)
+
+            #what direction is the head facing
+            if index == 0:
+                screen.blit(self.head,block_rect)
+            elif index == len(self.body) - 1:
+                screen.blit(self.tail,block_rect)
+            else:
+                prev_block = self.body[index-1] - block
+                next_block = self.body[index+1] - block
+                if prev_block.x == next_block.x:
+                    screen.blit(self.body_vertical,block_rect)
+                elif prev_block.y == next_block.y:
+                    screen.blit(self.body_horizontal,block_rect)
+                else:
+                    if prev_block.x == -1 and next_block.y == -1 or prev_block.y == -1 and next_block.x == -1:
+                        screen.blit(self.body_tl,block_rect)
+                    if prev_block.x == -1 and next_block.y == 1 or prev_block.y == 1 and next_block.x == -1:
+                        screen.blit(self.body_bl,block_rect)
+                    if prev_block.x == 1 and next_block.y == -1 or prev_block.y == -1 and next_block.x == 1:
+                        screen.blit(self.body_tr,block_rect)
+                    if prev_block.x == 1 and next_block.y == 1 or prev_block.y == 1 and next_block.x == 1:
+                        screen.blit(self.body_br,block_rect)
 
     def move_snake(self):
         # new head = direction, remove last block of snake
@@ -45,6 +93,28 @@ class SNAKE:
     
     def grow_body(self):
         self.new_block = True
+
+    def update_head(self):
+        head_face = self.body[1] - self.body[0]
+        if head_face == Vector2(1,0):
+            self.head = self.head_left
+        if head_face == Vector2(-1,0):
+            self.head = self.head_right
+        if head_face == Vector2(0,1):
+            self.head = self.head_up
+        if head_face == Vector2(0,-1):
+            self.head = self.head_down
+    
+    def update_tail(self):
+        head_face = self.body[-2] - self.body[-1]
+        if head_face == Vector2(1,0):
+            self.tail = self.tail_left
+        if head_face == Vector2(-1,0):
+            self.tail = self.tail_right
+        if head_face == Vector2(0,1):
+            self.tail = self.tail_up
+        if head_face == Vector2(0,-1):
+            self.tail = self.tail_down
 
 class MAIN:
     def __init__(self):
