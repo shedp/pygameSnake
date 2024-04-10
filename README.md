@@ -8,6 +8,12 @@ This is a solo project creating the classic Snake game with python and Pygame.
 - Pygame 2.5.2
 - Python
 
+## Istallation
+
+- `pip install pygame`
+- Download or clone this repo
+  `git clone`
+
 ## How Games Work
 
 - Game loop
