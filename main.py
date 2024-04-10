@@ -26,6 +26,8 @@ class SNAKE:
         self.head = self.body[0]
         self.tail = self.body[-1]
 
+        self.crunch_sound = pygame.mixer.Sound('sound/crunch.wav')
+
         self.head_up = pygame.image.load('graphics/head_up.png').convert_alpha()
         self.head_down = pygame.image.load('graphics/head_down.png').convert_alpha()
         self.head_right = pygame.image.load('graphics/head_right.png').convert_alpha()
@@ -116,6 +118,9 @@ class SNAKE:
         if head_face == Vector2(0,-1):
             self.tail = self.tail_down
 
+    def play_sound(self):
+        self.crunch_sound.play()
+
 class MAIN:
     def __init__(self):
         self.snake = SNAKE()
@@ -136,6 +141,11 @@ class MAIN:
         if self.fruit.pos == self.snake.body[0]:
             self.fruit.randomise_pos()
             self.snake.grow_body()
+            self.snake.play_sound()
+
+        for block in self.snake.body[1:]:
+            if block == self.fruit.pos:
+                self.fruit.randomise_pos()
     
     def check_fail(self):
         if not 0 <= self.snake.body[0].x < cell_number or not 0 <= self.snake.body[0].y < cell_number:
@@ -170,6 +180,7 @@ class MAIN:
         score_rect = score_surface.get_rect(center=(score_x, 60))
         screen.blit(score_surface,score_rect)
 
+pygame.mixer.pre_init(44100,-16,2,512)
 pygame.init()
 
 cell_size = 40
