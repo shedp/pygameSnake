@@ -1,6 +1,12 @@
 # Python Snake
 
 This is my first venture with pygame!
+This is a solo project creating the classic Snake game with python and Pygame.
+
+## Technologies
+
+- Pygame 2.5.2
+- Python
 
 ## How Games Work
 
